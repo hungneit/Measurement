@@ -2,9 +2,9 @@
 #include <stdio.h>
 
 #define DHT11_PIN     9 
-#define RAIN_PIN      8
-#define SERVO_PIN     8
-#define UART_TX_PIN   9
+#define RAIN_PIN      8 
+#define SERVO_PIN     8  
+#define UART_TX_PIN   9  
 
 
 void SystemInit72MHz(void);
@@ -18,7 +18,6 @@ void dht11_output_mode(void);
 void servo_pwm_init(void);
 void servo_set_angle(int angle);
 uint8_t dht11_read(uint8_t *temperature, uint8_t *humidity);
-
 
 void uart_init(void) {
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_USART1EN | RCC_APB2ENR_AFIOEN;
@@ -53,7 +52,6 @@ void SystemInit72MHz(void) {
     while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL);
 }
 
-
 void timer_init(void) {
     RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
     TIM2->PSC = 72 - 1;
@@ -72,22 +70,22 @@ void delay_ms(uint32_t ms) {
 
 void gpio_input_pb(uint8_t pin) {
     RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
-    if (pin >= 😎 {
-        GPIOB->CRH &= ~(0xF << ((pin - 😎 * 4));
-        GPIOB->CRH |=  (0x4 << ((pin - 😎 * 4));
+    if (pin >= 8) {
+        GPIOB->CRH &= ~(0xF << ((pin - 8) * 4));
+        GPIOB->CRH |=  (0x4 << ((pin - 8) * 4));
     }
 }
 
 void dht11_output_mode(void) {
-    GPIOB->CRH &= ~(0xF << 4);
-    GPIOB->CRH |= (0x3 << 4);
+    GPIOB->CRH &= ~(0xF << 4); 
+    GPIOB->CRH |= (0x3 << 4);  
 }
 
-// ==== Servo PWM ====
 void servo_pwm_init(void) {
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_TIM1EN;
     GPIOA->CRH &= ~(0xF << 0);
     GPIOA->CRH |= (0x0B << 0);
+
     TIM1->PSC = 72 - 1;
     TIM1->ARR = 20000 - 1;
     TIM1->CCR1 = 500;
@@ -101,7 +99,6 @@ void servo_set_angle(int angle) {
     uint16_t pulse = 500 + (angle * 2000) / 180;
     TIM1->CCR1 = pulse;
 }
-
 
 uint8_t dht11_read(uint8_t *temperature, uint8_t *humidity) {
     uint8_t data[5] = {0};
